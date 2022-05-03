@@ -32,10 +32,6 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    #if message.content.startswith('$hello'):
-        #await message.channel.send('Hello')
-    if message.content.startswith('l!s'):
-        await message.channel.send('Results:')
 
 youtube_dl.utils.bug_reports_message = lambda: ''
 
