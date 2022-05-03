@@ -10,9 +10,11 @@ import youtube_dl
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
 
-intents = discord.Intents().all()
+intents = discord.Intents().default()
+intents.typing = False
+intents.presences = False
 client = discord.Client(intents = intents)
-bot = commands.Bot(command_prefix = '!', intents=intents)
+bot = commands.Bot(command_prefix = 'l!', intents=intents)
 
 
 def get_results():
@@ -91,7 +93,7 @@ async def leave(ctx):
     else:
         await ctx.send("The bot is not connected to a voice channel")
 
-@bot.command(name = 'play_song', help = 'To play a song')
+@bot.command(name = 'play', help = 'To play a song')
 async def play(ctx, url):
     try:
         server = ctx.message.guild
