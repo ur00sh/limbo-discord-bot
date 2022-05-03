@@ -2,6 +2,7 @@
 #Project: Limbo discord bot
 #Date: 3rd May 2022
 
+#implementing needed libraries
 import discord
 import os
 import requests
@@ -16,12 +17,13 @@ intents.presences = False
 client = discord.Client(intents = intents)
 bot = commands.Bot(command_prefix = 'l!', intents=intents)
 
-
+#pulling results from youtube
 def get_results():
     response = requests.get("https://www.youtube.com/")
     json_data = json.loads(response.text)
     result = json_data[0]['q'] + " -" + json_data[0]['a']
     return(result)
+
 
 @client.event
 async def on_ready():
@@ -32,7 +34,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-
+#ffmpeg formatting
 youtube_dl.utils.bug_reports_message = lambda: ''
 
 ytdl_format_options = {
@@ -52,6 +54,7 @@ ffmpeg_options = {
     'options': '-vn'
 }
 
+#downloading audio and streaming it in a channel
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 #integration of youtube api
 class YTDLSource(discord.PCMVolumeTransformer):
@@ -126,6 +129,7 @@ async def stop(ctx):
     else:
         await ctx.send("The bot is not playing anything at the moment")
 
+#loads .env file
 load_dotenv()
 DISCORD_TOKEN = os.getenv("discord_token")
 
