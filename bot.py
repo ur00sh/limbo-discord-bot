@@ -23,6 +23,8 @@ intents = discord.Intents().default()
 intents.typing = False
 intents.presences = False
 client = discord.Client(intents = intents)
+song = asyncio.Queue()
+play_next_song = asyncio.Event()
 
 help_command = commands.DefaultHelpCommand(no_category = 'Commands')
 
@@ -71,6 +73,17 @@ ytdl_format_options = {
 ffmpeg_options = {
     'options': '-vn'
 }
+
+async def audio_player_task():
+    while True:
+        play_next_song.clear()
+        current = await song.get()
+        current.start()
+        await play_next_song.wait()
+
+def toggle_next():
+    client.loop.call_soon_threadsafe(play_next_song.set)   
+
 
 #downloading audio and streaming it in a channel
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
@@ -125,6 +138,8 @@ async def play(ctx, url):
         await ctx.send('**Now playing:** {}, enlisted by {}'.format(filename, ctx.message.author.name))
     except:
         await ctx.send("The bot isn't connected to a voice channel")
+
+
     
 
 
